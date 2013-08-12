@@ -144,6 +144,8 @@ typedef enum {
 
 @interface WRRequestDownload : WRRequest<NSStreamDelegate>
 
+@property (nonatomic, readwrite) BOOL downloadToMemoryBlock;
+@property (nonatomic, retain) NSURL *downloadLocation;
 @property (nonatomic, strong) NSData * receivedData;
 
 @end

@@ -316,7 +316,6 @@ static NSMutableDictionary *folders;
 }
 
 - (void) start{
-
     if (self.hostname==nil) {
         InfoLog(@"The host name is nil!");
         self.error = [[WRRequestError alloc] init];
@@ -324,6 +323,9 @@ static NSMutableDictionary *folders;
         [self.delegate requestFailed:self];
         return;
     }
+
+    if (!self.downloadLocation || !self.downloadLocation.filePathURL.path.length < 1)
+        self.downloadToMemoryBlock = YES;
 
     // a little bit of C because I was not able to make NSInputStream play nice
     CFReadStreamRef readStreamRef = CFReadStreamCreateWithFTPURL(NULL, (__bridge CFURLRef)self.fullURL);
@@ -336,7 +338,6 @@ static NSMutableDictionary *folders;
         [self.delegate requestFailed:self];
         return;
     }
-
 
     self.streamInfo.readStream.delegate = self;
 	[self.streamInfo.readStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
@@ -361,7 +362,8 @@ static NSMutableDictionary *folders;
         case NSStreamEventOpenCompleted: {
             self.didManagedToOpenStream = YES;
             self.streamInfo.bytesConsumedInTotal = 0;
-            self.receivedData = [NSMutableData data];
+            if (self.downloadToMemoryBlock)
+                self.receivedData = [NSMutableData data];
         } break;
         case NSStreamEventHasBytesAvailable: {
 
@@ -369,11 +371,12 @@ static NSMutableDictionary *folders;
 
             if (self.streamInfo.bytesConsumedThisIteration!=-1) {
                 if (self.streamInfo.bytesConsumedThisIteration!=0) {
+                    if (self.downloadToMemoryBlock) {
+                        NSMutableData * recivedDataWithNewBytes = [self.receivedData mutableCopy];
+                        [recivedDataWithNewBytes appendBytes:self.streamInfo.buffer length:self.streamInfo.bytesConsumedThisIteration];
 
-                    NSMutableData * recivedDataWithNewBytes = [self.receivedData mutableCopy];
-                    [recivedDataWithNewBytes appendBytes:self.streamInfo.buffer length:self.streamInfo.bytesConsumedThisIteration];
-
-                    self.receivedData = [NSData dataWithData:recivedDataWithNewBytes];
+                        self.receivedData = [NSData dataWithData:recivedDataWithNewBytes];
+                    }
                 }
             }else{
                 InfoLog(@"Stream opened, but failed while trying to read from it.");
