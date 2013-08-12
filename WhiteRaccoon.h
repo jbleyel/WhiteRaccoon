@@ -81,11 +81,11 @@ typedef enum {
 @protocol WRRequestDelegate  <NSObject>
 
 @required
--(void) requestCompleted:(WRRequest *) request;
--(void) requestFailed:(WRRequest *) request;
+- (void)requestCompleted:(WRRequest *) request;
+- (void)requestFailed:(WRRequest *) request;
 
 @optional
--(BOOL) shouldOverwriteFileWithRequest: (WRRequest *) request;
+- (BOOL)shouldOverwriteFileWithRequest: (WRRequest *) request;
 - (void)progressUpdatedTo:(NSUInteger)rawProgressData; // usually a number of bytes
 
 @end
@@ -96,7 +96,7 @@ typedef enum {
 @protocol WRQueueDelegate  <WRRequestDelegate>
 
 @required
--(void) queueCompleted:(WRRequestQueue *)queue;
+- (void) queueCompleted:(WRRequestQueue *)queue;
 
 
 @end
@@ -119,8 +119,8 @@ typedef enum {
 @property (nonatomic, assign) BOOL passive;
 @property (nonatomic, strong) WRRequestError * error;
 
--(void) start;
--(void) destroy;
+- (void) start;
+- (void) destroy;
 
 +(NSDictionary *) cachedFolders;
 +(void) addFoldersToCache:(NSArray *) foldersArray forParentFolderPath:(NSString *) key;
@@ -196,10 +196,10 @@ typedef enum {
 
 @property (nonatomic, strong) id<WRQueueDelegate> delegate;
 
--(void) addRequest:(WRRequest *) request;
--(void) addRequestInFront:(WRRequest *) request;
--(void) addRequestsFromArray: (NSArray *) array;
--(void) removeRequestFromQueue:(WRRequest *) request;
+- (void) addRequest:(WRRequest *) request;
+- (void) addRequestInFront:(WRRequest *) request;
+- (void) addRequestsFromArray: (NSArray *) array;
+- (void) removeRequestFromQueue:(WRRequest *) request;
 
 @end
 
@@ -235,6 +235,6 @@ typedef enum {
 @property (nonatomic, assign) WRErrorCodes errorCode;
 @property (weak, nonatomic, readonly) NSString * message;
 
--(WRErrorCodes) errorCodeWithError:(NSError *) error;
+- (WRErrorCodes) errorCodeWithError:(NSError *) error;
 
 @end
