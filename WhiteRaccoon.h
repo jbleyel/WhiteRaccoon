@@ -86,7 +86,7 @@ typedef enum {
 
 @optional
 -(BOOL) shouldOverwriteFileWithRequest: (WRRequest *) request;
-
+- (void)progressUpdatedTo:(NSUInteger)rawProgressData; // usually a number of bytes
 
 @end
 

@@ -376,6 +376,36 @@ static NSMutableDictionary *folders;
                         [recivedDataWithNewBytes appendBytes:self.streamInfo.buffer length:self.streamInfo.bytesConsumedThisIteration];
 
                         self.receivedData = [NSData dataWithData:recivedDataWithNewBytes];
+                    } else {
+                        NSFileHandle *fileHandle = [NSFileHandle fileHandleForWritingToURL:self.downloadLocation error:NULL];
+                        if (!fileHandle) {
+                            // create file
+                            [[NSFileManager defaultManager] createFileAtPath:self.downloadLocation.path contents:nil attributes:nil];
+                            fileHandle = [NSFileHandle fileHandleForWritingAtPath:self.downloadLocation.path];
+
+                            if (!fileHandle) {
+                                InfoLog(@"Stream opened, but failed to save it to file because file creation failed.");
+                                self.error = [[WRRequestError alloc] init];
+                                self.error.errorCode = kWRFTPServerUnknownError;
+                                [self.delegate requestFailed:self];
+                                [self destroy];
+                                return;
+                            }
+                        }
+
+                        @try {
+                            [fileHandle seekToEndOfFile];
+                            [fileHandle writeData:[NSData dataWithBytes:self.streamInfo.buffer length:self.streamInfo.bytesConsumedThisIteration]];
+
+                            self.streamInfo.bytesConsumedInTotal = self.streamInfo.bytesConsumedInTotal + self.streamInfo.bytesConsumedThisIteration;
+                            if ([self.delegate respondsToSelector:@selector(progressUpdatedTo:)])
+                                [self.delegate progressUpdatedTo:self.streamInfo.bytesConsumedInTotal];
+                        }
+                        @catch (NSException * e) {
+                            APLog(@"exception when writing to file %@", self.downloadLocation.path);
+                        }
+
+                        [fileHandle closeFile];
                     }
                 }
             }else{
