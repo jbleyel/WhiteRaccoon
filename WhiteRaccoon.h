@@ -115,6 +115,7 @@ typedef enum {
 @property (nonatomic, strong) NSString * hostname;
 @property (weak, nonatomic, readonly) NSString * credentials;
 @property (weak, nonatomic, readonly) NSURL * fullURL;
+@property (weak, nonatomic, readonly) NSString * fullURLString;
 @property (nonatomic, strong) NSString * path;
 @property (nonatomic, assign) BOOL passive;
 @property (nonatomic, strong) WRRequestError * error;

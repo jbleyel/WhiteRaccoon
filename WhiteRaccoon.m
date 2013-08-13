@@ -70,9 +70,11 @@ static NSMutableDictionary *folders;
 }
 
 - (NSURL*) fullURL {
-    // first we merge all the url parts into one big and beautiful url
-    NSString * fullURLString = [self.scheme stringByAppendingFormat:@"://%@%@/%@", self.credentials, self.hostname, self.path];
-    return [NSURL URLWithString:[fullURLString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+    return [NSURL URLWithString:[self.fullURLString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+}
+
+- (NSString *)fullURLString {
+    return [self.scheme stringByAppendingFormat:@"://%@%@/%@", self.credentials, self.hostname, self.path];
 }
 
 - (NSString *)path {
