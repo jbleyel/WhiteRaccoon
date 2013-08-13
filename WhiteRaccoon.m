@@ -324,8 +324,10 @@ static NSMutableDictionary *folders;
         return;
     }
 
-    if (!self.downloadLocation || !self.downloadLocation.filePathURL.path.length < 1)
+    if (!self.downloadLocation || self.downloadLocation.filePathURL.path.length < 1)
         self.downloadToMemoryBlock = YES;
+    else
+        self.downloadToMemoryBlock = NO;
 
     // a little bit of C because I was not able to make NSInputStream play nice
     CFReadStreamRef readStreamRef = CFReadStreamCreateWithFTPURL(NULL, (__bridge CFURLRef)self.fullURL);
@@ -372,10 +374,10 @@ static NSMutableDictionary *folders;
             if (self.streamInfo.bytesConsumedThisIteration!=-1) {
                 if (self.streamInfo.bytesConsumedThisIteration!=0) {
                     if (self.downloadToMemoryBlock) {
-                        NSMutableData * recivedDataWithNewBytes = [self.receivedData mutableCopy];
-                        [recivedDataWithNewBytes appendBytes:self.streamInfo.buffer length:self.streamInfo.bytesConsumedThisIteration];
+                        NSMutableData * receivedDataWithNewBytes = [self.receivedData mutableCopy];
+                        [receivedDataWithNewBytes appendBytes:self.streamInfo.buffer length:self.streamInfo.bytesConsumedThisIteration];
 
-                        self.receivedData = [NSData dataWithData:recivedDataWithNewBytes];
+                        self.receivedData = [NSData dataWithData:receivedDataWithNewBytes];
                     } else {
                         NSFileHandle *fileHandle = [NSFileHandle fileHandleForWritingToURL:self.downloadLocation error:NULL];
                         if (!fileHandle) {
