@@ -119,15 +119,13 @@ static NSMutableDictionary *folders;
 }
 
 - (NSString *) credentials {
-
     NSString * cred;
 
-    if (self.username!=nil) {
-        if (self.password!=nil) {
+    if (self.username.length > 0) {
+        if (self.password.length > 0)
             cred = [NSString stringWithFormat:@"%@:%@@", self.username, self.password];
-        }else{
+        else
             cred = [NSString stringWithFormat:@"%@@", self.username];
-        }
     }else{
         cred = @"";
     }
