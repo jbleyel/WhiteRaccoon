@@ -69,9 +69,8 @@ typedef enum {
 @interface WRStreamInfo:NSObject
 @property (nonatomic, strong) NSOutputStream    *writeStream;
 @property (nonatomic, strong) NSInputStream     *readStream;
-@property (nonatomic, assign) UInt32            bytesConsumedThisIteration;
-@property (nonatomic, assign) UInt32            bytesConsumedInTotal;
-@property (nonatomic, assign) SInt64            size;
+@property (nonatomic, assign) long long         bytesConsumedThisIteration;
+@property (nonatomic, assign) long long         bytesConsumedInTotal;
 @property (nonatomic, assign) float             completedPercentage;
 @property (nonatomic, assign) long long         maximumSize;
 @property (nonatomic, assign) UInt8            *buffer;

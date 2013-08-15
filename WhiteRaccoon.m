@@ -26,7 +26,7 @@
 #pragma mark - WRStreamInfo
 
 @implementation WRStreamInfo
-@synthesize buffer, bytesConsumedInTotal, bytesConsumedThisIteration, readStream, size, writeStream;
+@synthesize buffer, bytesConsumedInTotal, bytesConsumedThisIteration, readStream, writeStream;
 
 @end
 
@@ -350,6 +350,7 @@ static NSMutableDictionary *folders;
     }
 
     self.streamInfo.readStream.delegate = self;
+    [self.streamInfo.readStream setProperty: (id)kCFBooleanTrue forKey: (id)kCFStreamPropertyFTPFetchResourceInfo];
 	[self.streamInfo.readStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 	[self.streamInfo.readStream open];
 
@@ -420,7 +421,7 @@ static NSMutableDictionary *folders;
                     self.streamInfo.bytesConsumedInTotal = self.streamInfo.bytesConsumedInTotal + self.streamInfo.bytesConsumedThisIteration;
 
                     if (self.streamInfo.maximumSize > 0)
-                        self.streamInfo.completedPercentage = self.streamInfo.bytesConsumedInTotal / self.streamInfo.maximumSize;
+                        self.streamInfo.completedPercentage = (float)self.streamInfo.bytesConsumedInTotal / (float)self.streamInfo.maximumSize;
 
                     if ([self.delegate respondsToSelector:@selector(progressUpdatedTo:)])
                         [self.delegate progressUpdatedTo:self.streamInfo.completedPercentage];
