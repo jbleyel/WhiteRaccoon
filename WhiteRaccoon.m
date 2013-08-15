@@ -364,6 +364,8 @@ static NSMutableDictionary *folders;
         case NSStreamEventOpenCompleted: {
             self.didManagedToOpenStream = YES;
             self.streamInfo.bytesConsumedInTotal = 0;
+            self.streamInfo.maximumSize = [[theStream propertyForKey:(id)kCFStreamPropertyFTPResourceSize] integerValue];
+            self.streamInfo.completedPercentage = 0.;
             if (self.downloadToMemoryBlock)
                 self.receivedData = [NSMutableData data];
         } break;
@@ -398,10 +400,6 @@ static NSMutableDictionary *folders;
                         @try {
                             [fileHandle seekToEndOfFile];
                             [fileHandle writeData:[NSData dataWithBytes:self.streamInfo.buffer length:self.streamInfo.bytesConsumedThisIteration]];
-
-                            self.streamInfo.bytesConsumedInTotal = self.streamInfo.bytesConsumedInTotal + self.streamInfo.bytesConsumedThisIteration;
-                            if ([self.delegate respondsToSelector:@selector(progressUpdatedTo:)])
-                                [self.delegate progressUpdatedTo:self.streamInfo.bytesConsumedInTotal];
                         }
                         @catch (NSException * e) {
                             APLog(@"exception when writing to file %@", self.downloadLocation.path);
@@ -409,6 +407,13 @@ static NSMutableDictionary *folders;
 
                         [fileHandle closeFile];
                     }
+                    self.streamInfo.bytesConsumedInTotal = self.streamInfo.bytesConsumedInTotal + self.streamInfo.bytesConsumedThisIteration;
+
+                    if (self.streamInfo.maximumSize > 0)
+                        self.streamInfo.completedPercentage = self.streamInfo.bytesConsumedInTotal / self.streamInfo.maximumSize;
+
+                    if ([self.delegate respondsToSelector:@selector(progressUpdatedTo:)])
+                        [self.delegate progressUpdatedTo:self.streamInfo.completedPercentage];
                 }
             }else{
                 InfoLog(@"Stream opened, but failed while trying to read from it.");

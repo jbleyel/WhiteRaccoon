@@ -72,6 +72,8 @@ typedef enum {
 @property (nonatomic, assign) UInt32            bytesConsumedThisIteration;
 @property (nonatomic, assign) UInt32            bytesConsumedInTotal;
 @property (nonatomic, assign) SInt64            size;
+@property (nonatomic, assign) float             completedPercentage;
+@property (nonatomic, assign) long long         maximumSize;
 @property (nonatomic, assign) UInt8            *buffer;
 
 @end
@@ -86,7 +88,7 @@ typedef enum {
 
 @optional
 - (BOOL)shouldOverwriteFileWithRequest: (WRRequest *) request;
-- (void)progressUpdatedTo:(NSUInteger)rawProgressData; // usually a number of bytes
+- (void)progressUpdatedTo:(float)percentage;
 
 @end
 
