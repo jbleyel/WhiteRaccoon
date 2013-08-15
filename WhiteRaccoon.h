@@ -87,6 +87,7 @@ typedef enum {
 - (void)requestFailed:(WRRequest *) request;
 
 @optional
+- (void)requestStarted:(WRRequest *)request;
 - (BOOL)shouldOverwriteFileWithRequest: (WRRequest *) request;
 - (void)progressUpdatedTo:(float)percentage;
 

@@ -376,6 +376,8 @@ static NSMutableDictionary *folders;
             self.streamInfo.completedPercentage = 0.;
             if (self.downloadToMemoryBlock)
                 self.receivedData = [NSMutableData data];
+            if ([self.delegate respondsToSelector:@selector(requestStarted:)])
+                [self.delegate requestStarted:self];
         } break;
         case NSStreamEventHasBytesAvailable: {
 
@@ -630,6 +632,8 @@ static NSMutableDictionary *folders;
         case NSStreamEventOpenCompleted: {
             self.didManagedToOpenStream = YES;
             self.streamInfo.bytesConsumedInTotal = 0;
+            if ([self.delegate respondsToSelector:@selector(requestStarted:)])
+                [self.delegate requestStarted:self];
         } break;
         case NSStreamEventHasBytesAvailable: {
 
@@ -752,6 +756,8 @@ static NSMutableDictionary *folders;
     switch (streamEvent) {
         case NSStreamEventOpenCompleted: {
             self.didManagedToOpenStream = YES;
+            if ([self.delegate respondsToSelector:@selector(requestStarted:)])
+                [self.delegate requestStarted:self];
         } break;
         case NSStreamEventHasBytesAvailable: {
 
@@ -844,6 +850,8 @@ static NSMutableDictionary *folders;
         case NSStreamEventOpenCompleted: {
 			self.filesInfo = [NSMutableArray array];
             self.didManagedToOpenStream = YES;
+            if ([self.delegate respondsToSelector:@selector(requestStarted:)])
+                [self.delegate requestStarted:self];
         } break;
         case NSStreamEventHasBytesAvailable: {
 
