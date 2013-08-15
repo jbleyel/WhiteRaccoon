@@ -151,6 +151,8 @@ typedef enum {
 @property (nonatomic, retain) NSURL *downloadLocation;
 @property (nonatomic, strong) NSData * receivedData;
 
+- (void)startWithFullURL:(NSURL *)fullURL;
+
 @end
 
 #pragma mark - WRRequestUpload

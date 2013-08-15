@@ -315,8 +315,13 @@ static NSMutableDictionary *folders;
     return kWRDownloadRequest;
 }
 
-- (void) start{
-    if (self.hostname==nil) {
+- (void)start{
+    [self startWithFullURL:nil];
+}
+
+- (void)startWithFullURL:(NSURL *)fullURL
+{
+    if (self.hostname==nil && fullURL == nil) {
         InfoLog(@"The host name is nil!");
         self.error = [[WRRequestError alloc] init];
         self.error.errorCode = kWRFTPClientHostnameIsNil;
@@ -329,8 +334,11 @@ static NSMutableDictionary *folders;
     else
         self.downloadToMemoryBlock = NO;
 
+    if (fullURL == nil)
+        fullURL = self.fullURL;
+
     // a little bit of C because I was not able to make NSInputStream play nice
-    CFReadStreamRef readStreamRef = CFReadStreamCreateWithFTPURL(NULL, (__bridge CFURLRef)self.fullURL);
+    CFReadStreamRef readStreamRef = CFReadStreamCreateWithFTPURL(NULL, (__bridge CFURLRef)fullURL);
     self.streamInfo.readStream = (NSInputStream *)CFBridgingRelease(readStreamRef);
 
     if (self.streamInfo.readStream==nil) {
