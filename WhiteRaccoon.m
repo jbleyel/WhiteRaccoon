@@ -431,7 +431,6 @@ static NSMutableDictionary *folders;
                 self.error = [[WRRequestError alloc] init];
                 self.error.errorCode = kWRFTPClientCantReadStream;
                 [self.delegate requestFailed:self];
-                [self destroy];
             }
 
         } break;
@@ -443,12 +442,10 @@ static NSMutableDictionary *folders;
             self.error.errorCode = [self.error errorCodeWithError:[theStream streamError]];
             InfoLog(@"%@", self.error.message);
             [self.delegate requestFailed:self];
-            [self destroy];
         } break;
 
         case NSStreamEventEndEncountered: {
             [self.delegate requestCompleted:self];
-            [self destroy];
         } break;
 
         case NSStreamEventNone:
@@ -886,7 +883,6 @@ static NSMutableDictionary *folders;
                 [self.delegate requestFailed:self];
                 [self destroy];
             }
-
 
         } break;
         case NSStreamEventHasSpaceAvailable: {
