@@ -355,7 +355,7 @@ static NSMutableDictionary *folders;
 	[self.streamInfo.readStream open];
 
     self.didManagedToOpenStream = NO;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, kWRDefaultTimeout * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, kWRDefaultTimeout * NSEC_PER_SEC), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),^{
         if (!self.didManagedToOpenStream&&self.error==nil) {
             InfoLog(@"No response from the server. Timeout.");
             self.error = [[WRRequestError alloc] init];
@@ -611,7 +611,7 @@ static NSMutableDictionary *folders;
     }
 
     self.didManagedToOpenStream = NO;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, kWRDefaultTimeout * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, kWRDefaultTimeout * NSEC_PER_SEC), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         if (!self.didManagedToOpenStream&&self.error==nil) {
             InfoLog(@"No response from the server. Timeout.");
             self.error = [[WRRequestError alloc] init];
@@ -737,7 +737,7 @@ static NSMutableDictionary *folders;
     [self.streamInfo.writeStream open];
 
     self.didManagedToOpenStream = NO;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, kWRDefaultTimeout * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, kWRDefaultTimeout * NSEC_PER_SEC), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         if (!self.didManagedToOpenStream&&self.error==nil) {
             InfoLog(@"No response from the server. Timeout.");
             self.error = [[WRRequestError alloc] init];
@@ -830,7 +830,7 @@ static NSMutableDictionary *folders;
 	[self.streamInfo.readStream open];
 
     self.didManagedToOpenStream = NO;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, kWRDefaultTimeout * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, kWRDefaultTimeout * NSEC_PER_SEC), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         if (!self.didManagedToOpenStream&&self.error==nil) {
             InfoLog(@"No response from the server. Timeout.");
             self.error = [[WRRequestError alloc] init];
