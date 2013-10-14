@@ -423,8 +423,8 @@ static NSMutableDictionary *folders;
                     if (self.streamInfo.maximumSize > 0)
                         self.streamInfo.completedPercentage = (float)self.streamInfo.bytesConsumedInTotal / (float)self.streamInfo.maximumSize;
 
-                    if ([self.delegate respondsToSelector:@selector(progressUpdatedTo:)])
-                        [self.delegate progressUpdatedTo:self.streamInfo.completedPercentage];
+                    if ([self.delegate respondsToSelector:@selector(progressUpdatedTo:receivedDataSize:expectedDownloadSize:)])
+                        [self.delegate progressUpdatedTo:self.streamInfo.completedPercentage receivedDataSize:self.streamInfo.bytesConsumedInTotal expectedDownloadSize:self.streamInfo.maximumSize];
                 }
             }else{
                 InfoLog(@"Stream opened, but failed while trying to read from it.");
