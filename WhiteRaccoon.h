@@ -149,7 +149,7 @@ typedef enum {
 
 @property (nonatomic, readwrite) BOOL downloadToMemoryBlock;
 @property (nonatomic, retain) NSURL *downloadLocation;
-@property (nonatomic, strong) NSData * receivedData;
+@property (nonatomic, strong) NSMutableData * receivedData;
 
 - (void)startWithFullURL:(NSURL *)fullURL;
 

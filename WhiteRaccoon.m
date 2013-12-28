@@ -386,12 +386,9 @@ static NSMutableDictionary *folders;
 
             if (self.streamInfo.bytesConsumedThisIteration!=-1) {
                 if (self.streamInfo.bytesConsumedThisIteration!=0) {
-                    if (self.downloadToMemoryBlock) {
-                        NSMutableData * receivedDataWithNewBytes = [self.receivedData mutableCopy];
-                        [receivedDataWithNewBytes appendBytes:self.streamInfo.buffer length:self.streamInfo.bytesConsumedThisIteration];
-
-                        self.receivedData = [NSData dataWithData:receivedDataWithNewBytes];
-                    } else {
+                    if (self.downloadToMemoryBlock)
+                        [self.receivedData appendBytes:self.streamInfo.buffer length:self.streamInfo.bytesConsumedThisIteration];
+                    else {
                         NSFileHandle *fileHandle = [NSFileHandle fileHandleForWritingToURL:self.downloadLocation error:NULL];
                         if (!fileHandle) {
                             // create file
