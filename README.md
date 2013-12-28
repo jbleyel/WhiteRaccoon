@@ -1,3 +1,16 @@
+### Changes against the original implementation
+
+* Improved memory usage
+* Files are downloaded to a local file instead of dumping everything in memory if requested
+* Progress reports via delegation
+* Added an interface to access a full file URL within a session
+* Improved support for ftpd included within OS X 10.8 and later
+* Added an interface to download files with a full URL without the need to create a session first
+* Improved dispatch handling (dropping support for iOS 5)
+* Stability improvements
+
+
+
 ### General notes
 
 You can use WhiteRaccoon to interact with FTP servers in one of two ways: either make a simple request and send it right away to the FTP server or add several requests to a queue and the queue will send them one by one in the order in which they were added.
