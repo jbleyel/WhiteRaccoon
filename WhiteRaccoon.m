@@ -410,7 +410,7 @@ static NSMutableDictionary *folders;
                             [fileHandle writeData:[NSData dataWithBytes:self.streamInfo.buffer length:self.streamInfo.bytesConsumedThisIteration]];
                         }
                         @catch (NSException * e) {
-                            APLog(@"exception when writing to file %@", self.downloadLocation.path);
+                            NSLog(@"exception when writing to file %@", self.downloadLocation.path);
                         }
 
                         [fileHandle closeFile];
@@ -838,6 +838,8 @@ static NSMutableDictionary *folders;
     });
 }
 
+#define SYSTEM_VERSION_LESS_THAN(v) ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
+
 //stream delegate
 - (void)stream:(NSStream *)theStream handleEvent:(NSStreamEvent)streamEvent {
 
@@ -866,6 +868,15 @@ static NSMutableDictionary *folders;
 
                         if (parsedBytes > 0) {
                             if (listingEntity != NULL) {
+                                if (SYSTEM_VERSION_LESS_THAN(@"7.0"))
+                                {
+                                    //----- July 10, 2012: CFFTPCreateParsedResourceListing had a bug that had the date over retained
+                                    //----- in order to fix this, we release it once. However, just as a precaution, we check to see what
+                                    //----- the retain count might be (this isn't guaranteed to work).
+                                    id date = [(__bridge NSDictionary *) listingEntity objectForKey: (id) kCFFTPResourceModDate];
+                                    if (CFGetRetainCount((__bridge CFTypeRef) date) >= 2)
+                                        CFRelease((__bridge CFTypeRef) date);
+                                }
                                 self.filesInfo = [self.filesInfo arrayByAddingObject:(NSDictionary *)CFBridgingRelease(listingEntity)];
                             }
                             offset += parsedBytes;
@@ -956,8 +967,6 @@ static NSMutableDictionary *folders;
         case kWRFTPClientFileAlreadyExists:
             mess = @"File already exists!";
             break;
-
-
 
             //Server errors
         case kWRFTPServerAbortedTransfer:
